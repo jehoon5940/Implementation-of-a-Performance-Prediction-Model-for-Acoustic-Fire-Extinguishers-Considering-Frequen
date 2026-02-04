@@ -1,0 +1,3146 @@
+{
+  "metadata": {
+    "kernelspec": {
+      "language": "python",
+      "display_name": "Python 3",
+      "name": "python3"
+    },
+    "language_info": {
+      "pygments_lexer": "ipython3",
+      "nbconvert_exporter": "python",
+      "version": "3.6.4",
+      "file_extension": ".py",
+      "codemirror_mode": {
+        "name": "ipython",
+        "version": 3
+      },
+      "name": "python",
+      "mimetype": "text/x-python"
+    },
+    "kaggle": {
+      "accelerator": "none",
+      "dataSources": [
+        {
+          "sourceId": 3398754,
+          "sourceType": "datasetVersion",
+          "datasetId": 2048841
+        }
+      ],
+      "dockerImageVersionId": 30178,
+      "isInternetEnabled": true,
+      "language": "python",
+      "sourceType": "notebook",
+      "isGpuEnabled": false
+    },
+    "colab": {
+      "provenance": []
+    }
+  },
+  "nbformat_minor": 0,
+  "nbformat": 4,
+  "cells": [
+    {
+      "cell_type": "raw",
+      "source": [
+        "\"Yavuz Selim TASPINAR, Murat KOKLU and Mustafa ALTIN\n",
+        "CV:https://www.muratkoklu.com/en/publications/\n",
+        "DATASET: https://www.muratkoklu.com/datasets/\n",
+        "Citation Request :\n",
+        "1: KOKLU M., TASPINAR Y.S.,  (2021).  Determining the Extinguishing Status of Fuel Flames With Sound Wave by Machine Learning Methods.  IEEE Access, 9, pp.86207-86216, Doi: 10.1109/ACCESS.2021.3088612\n",
+        "Link: https://ieeexplore.ieee.org/document/9452168 (Open Access)\n",
+        "https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=9452168\n",
+        "\n",
+        "2: TASPINAR Y.S., KOKLU M., ALTIN M., (2021).  Classification of Flame Extinction Based on Acoustic Oscillations using Artificial Intelligence Methods.  Case Studies in Thermal Engineering, 28, 101561, Doi: 10.1016/j.csite.2021.101561\n",
+        "Link: https://www.sciencedirect.com/science/article/pii/S2214157X21007243  (Open Access) https://www.sciencedirect.com/sdfe/reader/pii/S2214157X21007243/pdf\n",
+        "\n",
+        "3: TASPINAR Y.S., KOKLU M., ALTIN M., (2022).  Acoustic-Driven Airflow Flame Extinguishing System Design and Analysis of Capabilities of Low Frequency in Different Fuels.  Fire Technology, Doi: 10.1007/s10694-021-01208-9\n",
+        "Link: https://link.springer.com/content/pdf/10.1007/s10694-021-01208-9.pdf\"\n"
+      ],
+      "metadata": {
+        "id": "639ca5fa"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "!pip install openpyxl"
+      ],
+      "metadata": {
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:45:26.59899Z",
+          "iopub.execute_input": "2022-04-26T04:45:26.599863Z",
+          "iopub.status.idle": "2022-04-26T04:45:36.675502Z",
+          "shell.execute_reply.started": "2022-04-26T04:45:26.599786Z",
+          "shell.execute_reply": "2022-04-26T04:45:36.674427Z"
+        },
+        "trusted": true,
+        "id": "2YHK-L0LIa0Q"
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import numpy as np\n",
+        "import pandas as pd\n",
+        "import matplotlib.pyplot as plt\n",
+        "import seaborn as sns\n",
+        "\n",
+        "import warnings\n",
+        "warnings.filterwarnings(\"ignore\")"
+      ],
+      "metadata": {
+        "id": "887c5608",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:45:36.680083Z",
+          "iopub.execute_input": "2022-04-26T04:45:36.680305Z",
+          "iopub.status.idle": "2022-04-26T04:45:37.206958Z",
+          "shell.execute_reply.started": "2022-04-26T04:45:36.680276Z",
+          "shell.execute_reply": "2022-04-26T04:45:37.206083Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "df=pd.read_excel('Acoustic_Extinguisher_Fire_Dataset.xlsx')\n",
+        "df.head()"
+      ],
+      "metadata": {
+        "id": "db2e2b00",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:45:37.208131Z",
+          "iopub.execute_input": "2022-04-26T04:45:37.208359Z",
+          "iopub.status.idle": "2022-04-26T04:45:39.884183Z",
+          "shell.execute_reply.started": "2022-04-26T04:45:37.208331Z",
+          "shell.execute_reply": "2022-04-26T04:45:39.883095Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "df.info()"
+      ],
+      "metadata": {
+        "id": "05f2f860",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:45:39.8872Z",
+          "iopub.execute_input": "2022-04-26T04:45:39.887519Z",
+          "iopub.status.idle": "2022-04-26T04:45:39.912756Z",
+          "shell.execute_reply.started": "2022-04-26T04:45:39.887475Z",
+          "shell.execute_reply": "2022-04-26T04:45:39.911778Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "df.isna().sum()"
+      ],
+      "metadata": {
+        "id": "92284ab2",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:45:39.913785Z",
+          "iopub.execute_input": "2022-04-26T04:45:39.914033Z",
+          "iopub.status.idle": "2022-04-26T04:45:39.926438Z",
+          "shell.execute_reply.started": "2022-04-26T04:45:39.913995Z",
+          "shell.execute_reply": "2022-04-26T04:45:39.92533Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "sns.heatmap(df.isna(),yticklabels=False,cmap=\"viridis\")\n",
+        "plt.show()"
+      ],
+      "metadata": {
+        "id": "2f7d435c",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:45:39.927917Z",
+          "iopub.execute_input": "2022-04-26T04:45:39.928254Z",
+          "iopub.status.idle": "2022-04-26T04:45:40.328706Z",
+          "shell.execute_reply.started": "2022-04-26T04:45:39.928222Z",
+          "shell.execute_reply": "2022-04-26T04:45:40.327899Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "df.describe()"
+      ],
+      "metadata": {
+        "id": "ef8ecfeb",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:45:40.329819Z",
+          "iopub.execute_input": "2022-04-26T04:45:40.330052Z",
+          "iopub.status.idle": "2022-04-26T04:45:40.365135Z",
+          "shell.execute_reply.started": "2022-04-26T04:45:40.330009Z",
+          "shell.execute_reply": "2022-04-26T04:45:40.364225Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "df.describe(include=[\"object\"])"
+      ],
+      "metadata": {
+        "id": "b232f8ba",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:45:40.36661Z",
+          "iopub.execute_input": "2022-04-26T04:45:40.366929Z",
+          "iopub.status.idle": "2022-04-26T04:45:40.385847Z",
+          "shell.execute_reply.started": "2022-04-26T04:45:40.36689Z",
+          "shell.execute_reply": "2022-04-26T04:45:40.385004Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "sns.countplot(df[\"FUEL\"])\n",
+        "plt.show()"
+      ],
+      "metadata": {
+        "id": "828f398b",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:45:40.387109Z",
+          "iopub.execute_input": "2022-04-26T04:45:40.387334Z",
+          "iopub.status.idle": "2022-04-26T04:45:40.571139Z",
+          "shell.execute_reply.started": "2022-04-26T04:45:40.387306Z",
+          "shell.execute_reply": "2022-04-26T04:45:40.570311Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "df[\"FUEL\"].value_counts().plot(kind=\"pie\",autopct=\"%.2f%%\")\n",
+        "plt.show()"
+      ],
+      "metadata": {
+        "id": "cb7ad4af",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:45:40.572755Z",
+          "iopub.execute_input": "2022-04-26T04:45:40.573391Z",
+          "iopub.status.idle": "2022-04-26T04:45:40.704819Z",
+          "shell.execute_reply.started": "2022-04-26T04:45:40.573345Z",
+          "shell.execute_reply": "2022-04-26T04:45:40.703998Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "sns.countplot(df[\"STATUS\"])\n",
+        "plt.show()"
+      ],
+      "metadata": {
+        "id": "80eb049d",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:45:40.706188Z",
+          "iopub.execute_input": "2022-04-26T04:45:40.707132Z",
+          "iopub.status.idle": "2022-04-26T04:45:40.856456Z",
+          "shell.execute_reply.started": "2022-04-26T04:45:40.707083Z",
+          "shell.execute_reply": "2022-04-26T04:45:40.855648Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "df[\"STATUS\"].value_counts().plot(kind=\"pie\",autopct=\"%.2f%%\")\n",
+        "plt.show()"
+      ],
+      "metadata": {
+        "id": "8152bcbb",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:45:40.857908Z",
+          "iopub.execute_input": "2022-04-26T04:45:40.85868Z",
+          "iopub.status.idle": "2022-04-26T04:45:40.950313Z",
+          "shell.execute_reply.started": "2022-04-26T04:45:40.858627Z",
+          "shell.execute_reply": "2022-04-26T04:45:40.949144Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from sklearn.preprocessing import OrdinalEncoder"
+      ],
+      "metadata": {
+        "id": "05b29e17",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:45:40.955592Z",
+          "iopub.execute_input": "2022-04-26T04:45:40.956198Z",
+          "iopub.status.idle": "2022-04-26T04:45:41.111393Z",
+          "shell.execute_reply.started": "2022-04-26T04:45:40.956146Z",
+          "shell.execute_reply": "2022-04-26T04:45:41.11063Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "oe=OrdinalEncoder()\n",
+        "df[\"FUEL\"]=oe.fit_transform(df[[\"FUEL\"]])"
+      ],
+      "metadata": {
+        "id": "251220df",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:45:41.112467Z",
+          "iopub.execute_input": "2022-04-26T04:45:41.112651Z",
+          "iopub.status.idle": "2022-04-26T04:45:41.125473Z",
+          "shell.execute_reply.started": "2022-04-26T04:45:41.112628Z",
+          "shell.execute_reply": "2022-04-26T04:45:41.124562Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "oe.categories_"
+      ],
+      "metadata": {
+        "id": "14f25be7",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:45:41.126557Z",
+          "iopub.execute_input": "2022-04-26T04:45:41.126782Z",
+          "iopub.status.idle": "2022-04-26T04:45:41.136126Z",
+          "shell.execute_reply.started": "2022-04-26T04:45:41.126754Z",
+          "shell.execute_reply": "2022-04-26T04:45:41.135295Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "df.head()"
+      ],
+      "metadata": {
+        "id": "4b30ef1c",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:45:41.137821Z",
+          "iopub.execute_input": "2022-04-26T04:45:41.138434Z",
+          "iopub.status.idle": "2022-04-26T04:45:41.154136Z",
+          "shell.execute_reply.started": "2022-04-26T04:45:41.138391Z",
+          "shell.execute_reply": "2022-04-26T04:45:41.153065Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from scipy.stats import skew"
+      ],
+      "metadata": {
+        "id": "3f7c70be",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:45:41.155248Z",
+          "iopub.execute_input": "2022-04-26T04:45:41.155463Z",
+          "iopub.status.idle": "2022-04-26T04:45:41.15911Z",
+          "shell.execute_reply.started": "2022-04-26T04:45:41.155436Z",
+          "shell.execute_reply": "2022-04-26T04:45:41.158315Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "for col in df:\n",
+        "    print(col)\n",
+        "    print(f\"Skewness: {skew(df[col])}\")\n",
+        "\n",
+        "    plt.figure()\n",
+        "    sns.distplot(df[col])\n",
+        "    plt.grid(True)\n",
+        "    plt.show()"
+      ],
+      "metadata": {
+        "id": "049ac716",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:45:41.160771Z",
+          "iopub.execute_input": "2022-04-26T04:45:41.161509Z",
+          "iopub.status.idle": "2022-04-26T04:45:43.607295Z",
+          "shell.execute_reply.started": "2022-04-26T04:45:41.161461Z",
+          "shell.execute_reply": "2022-04-26T04:45:43.606383Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "df.corr()"
+      ],
+      "metadata": {
+        "id": "b322af63",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:45:43.608684Z",
+          "iopub.execute_input": "2022-04-26T04:45:43.609165Z",
+          "iopub.status.idle": "2022-04-26T04:45:43.631924Z",
+          "shell.execute_reply.started": "2022-04-26T04:45:43.609129Z",
+          "shell.execute_reply": "2022-04-26T04:45:43.631348Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "df.corr()[\"STATUS\"].sort_values()"
+      ],
+      "metadata": {
+        "id": "ed9e47c8",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:45:43.633149Z",
+          "iopub.execute_input": "2022-04-26T04:45:43.633719Z",
+          "iopub.status.idle": "2022-04-26T04:45:43.644865Z",
+          "shell.execute_reply.started": "2022-04-26T04:45:43.633689Z",
+          "shell.execute_reply": "2022-04-26T04:45:43.644074Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "plt.figure(figsize=(10,5))\n",
+        "sns.heatmap(df.corr(),annot=True,cmap=\"viridis\")\n",
+        "plt.show()"
+      ],
+      "metadata": {
+        "id": "00771d73",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:45:43.645872Z",
+          "iopub.execute_input": "2022-04-26T04:45:43.646628Z",
+          "iopub.status.idle": "2022-04-26T04:45:44.112314Z",
+          "shell.execute_reply.started": "2022-04-26T04:45:43.646592Z",
+          "shell.execute_reply": "2022-04-26T04:45:44.111478Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "plt.figure(figsize=(10,5))\n",
+        "plt.bar(df.columns,df.nunique())\n",
+        "plt.show()"
+      ],
+      "metadata": {
+        "id": "9028b965",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:45:44.1134Z",
+          "iopub.execute_input": "2022-04-26T04:45:44.11361Z",
+          "iopub.status.idle": "2022-04-26T04:45:44.295803Z",
+          "shell.execute_reply.started": "2022-04-26T04:45:44.113583Z",
+          "shell.execute_reply": "2022-04-26T04:45:44.294918Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "df.columns"
+      ],
+      "metadata": {
+        "id": "47624fe9",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:45:44.296988Z",
+          "iopub.execute_input": "2022-04-26T04:45:44.297212Z",
+          "iopub.status.idle": "2022-04-26T04:45:44.304045Z",
+          "shell.execute_reply.started": "2022-04-26T04:45:44.297185Z",
+          "shell.execute_reply": "2022-04-26T04:45:44.303138Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "x=df.iloc[ : , :-1]\n",
+        "x.head()"
+      ],
+      "metadata": {
+        "id": "6af385b9",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:45:44.305361Z",
+          "iopub.execute_input": "2022-04-26T04:45:44.305672Z",
+          "iopub.status.idle": "2022-04-26T04:45:44.323353Z",
+          "shell.execute_reply.started": "2022-04-26T04:45:44.305629Z",
+          "shell.execute_reply": "2022-04-26T04:45:44.322305Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "y=df.iloc[ : ,-1]\n",
+        "y.head()"
+      ],
+      "metadata": {
+        "id": "b14a96ee",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:45:44.324619Z",
+          "iopub.execute_input": "2022-04-26T04:45:44.324886Z",
+          "iopub.status.idle": "2022-04-26T04:45:44.33658Z",
+          "shell.execute_reply.started": "2022-04-26T04:45:44.324851Z",
+          "shell.execute_reply": "2022-04-26T04:45:44.335725Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from sklearn.model_selection import train_test_split\n",
+        "xtrain,xtest,ytrain,ytest=train_test_split(x,y,test_size=0.3,random_state=1)"
+      ],
+      "metadata": {
+        "id": "cad5e83e",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:45:44.33781Z",
+          "iopub.execute_input": "2022-04-26T04:45:44.338076Z",
+          "iopub.status.idle": "2022-04-26T04:45:44.402223Z",
+          "shell.execute_reply.started": "2022-04-26T04:45:44.33804Z",
+          "shell.execute_reply": "2022-04-26T04:45:44.401415Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from sklearn.preprocessing import StandardScaler\n",
+        "ss=StandardScaler()\n",
+        "xtrain=ss.fit_transform(xtrain)\n",
+        "xtest=ss.fit_transform(xtest)"
+      ],
+      "metadata": {
+        "id": "4fd8942b",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:45:44.403395Z",
+          "iopub.execute_input": "2022-04-26T04:45:44.403625Z",
+          "iopub.status.idle": "2022-04-26T04:45:44.417157Z",
+          "shell.execute_reply.started": "2022-04-26T04:45:44.403595Z",
+          "shell.execute_reply": "2022-04-26T04:45:44.416432Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from sklearn.metrics import accuracy_score, confusion_matrix, classification_report"
+      ],
+      "metadata": {
+        "id": "69ee7464",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:45:44.419566Z",
+          "iopub.execute_input": "2022-04-26T04:45:44.420186Z",
+          "iopub.status.idle": "2022-04-26T04:45:44.424911Z",
+          "shell.execute_reply.started": "2022-04-26T04:45:44.420151Z",
+          "shell.execute_reply": "2022-04-26T04:45:44.423928Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "# KNN"
+      ],
+      "metadata": {
+        "id": "0b11830d"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from sklearn.neighbors import KNeighborsClassifier\n",
+        "knn=KNeighborsClassifier()\n",
+        "knn.fit(xtrain,ytrain)\n",
+        "ypred=knn.predict(xtest)"
+      ],
+      "metadata": {
+        "id": "8458b9a3",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:45:44.426416Z",
+          "iopub.execute_input": "2022-04-26T04:45:44.427045Z",
+          "iopub.status.idle": "2022-04-26T04:45:44.788376Z",
+          "shell.execute_reply.started": "2022-04-26T04:45:44.42699Z",
+          "shell.execute_reply": "2022-04-26T04:45:44.787381Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "print(classification_report(ytest,ypred))"
+      ],
+      "metadata": {
+        "id": "d3cc402f",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:45:44.790152Z",
+          "iopub.execute_input": "2022-04-26T04:45:44.79068Z",
+          "iopub.status.idle": "2022-04-26T04:45:44.81099Z",
+          "shell.execute_reply.started": "2022-04-26T04:45:44.790625Z",
+          "shell.execute_reply": "2022-04-26T04:45:44.810115Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "accuracy_score(ytest,ypred)"
+      ],
+      "metadata": {
+        "id": "5f491a06",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:45:44.812303Z",
+          "iopub.execute_input": "2022-04-26T04:45:44.812508Z",
+          "iopub.status.idle": "2022-04-26T04:45:44.824677Z",
+          "shell.execute_reply.started": "2022-04-26T04:45:44.812481Z",
+          "shell.execute_reply": "2022-04-26T04:45:44.823954Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "confusion_matrix(ytest,ypred)"
+      ],
+      "metadata": {
+        "id": "9c44cc82",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:45:44.825811Z",
+          "iopub.execute_input": "2022-04-26T04:45:44.826295Z",
+          "iopub.status.idle": "2022-04-26T04:45:44.839572Z",
+          "shell.execute_reply.started": "2022-04-26T04:45:44.82624Z",
+          "shell.execute_reply": "2022-04-26T04:45:44.838628Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "#### Hyper-Parameter Tuning"
+      ],
+      "metadata": {
+        "id": "5f6d69b4"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "accuracy=[]\n",
+        "for i in range(1,21):\n",
+        "    knn=KNeighborsClassifier(n_neighbors=i)\n",
+        "    knn.fit(xtrain,ytrain)\n",
+        "    ypred=knn.predict(xtest)\n",
+        "    ac=accuracy_score(ytest,ypred)\n",
+        "    accuracy.append(ac)"
+      ],
+      "metadata": {
+        "id": "a677b71c",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:45:44.84126Z",
+          "iopub.execute_input": "2022-04-26T04:45:44.842481Z",
+          "iopub.status.idle": "2022-04-26T04:45:49.800802Z",
+          "shell.execute_reply.started": "2022-04-26T04:45:44.842439Z",
+          "shell.execute_reply": "2022-04-26T04:45:49.800004Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "plt.plot(range(1,21),accuracy)\n",
+        "plt.grid(True)\n",
+        "plt.show()"
+      ],
+      "metadata": {
+        "id": "263a42ca",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:45:49.802425Z",
+          "iopub.execute_input": "2022-04-26T04:45:49.802763Z",
+          "iopub.status.idle": "2022-04-26T04:45:49.997512Z",
+          "shell.execute_reply.started": "2022-04-26T04:45:49.802723Z",
+          "shell.execute_reply": "2022-04-26T04:45:49.996912Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "knn=KNeighborsClassifier(n_neighbors=3)\n",
+        "knn.fit(xtrain,ytrain)\n",
+        "ypred=knn.predict(xtest)"
+      ],
+      "metadata": {
+        "id": "e8be38c4",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:45:49.99852Z",
+          "iopub.execute_input": "2022-04-26T04:45:49.998871Z",
+          "iopub.status.idle": "2022-04-26T04:45:50.225629Z",
+          "shell.execute_reply.started": "2022-04-26T04:45:49.998836Z",
+          "shell.execute_reply": "2022-04-26T04:45:50.224562Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "print(classification_report(ytest,ypred))"
+      ],
+      "metadata": {
+        "id": "4efb2cd7",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:45:50.227064Z",
+          "iopub.execute_input": "2022-04-26T04:45:50.227317Z",
+          "iopub.status.idle": "2022-04-26T04:45:50.246071Z",
+          "shell.execute_reply.started": "2022-04-26T04:45:50.227285Z",
+          "shell.execute_reply": "2022-04-26T04:45:50.245077Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "accuracy_score(ytest,ypred)"
+      ],
+      "metadata": {
+        "id": "e4dcfd99",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:45:50.247708Z",
+          "iopub.execute_input": "2022-04-26T04:45:50.248235Z",
+          "iopub.status.idle": "2022-04-26T04:45:50.255737Z",
+          "shell.execute_reply.started": "2022-04-26T04:45:50.248187Z",
+          "shell.execute_reply": "2022-04-26T04:45:50.254878Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "confusion_matrix(ytest,ypred)"
+      ],
+      "metadata": {
+        "id": "bae3dbab",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:45:50.257342Z",
+          "iopub.execute_input": "2022-04-26T04:45:50.257932Z",
+          "iopub.status.idle": "2022-04-26T04:45:50.267932Z",
+          "shell.execute_reply.started": "2022-04-26T04:45:50.257886Z",
+          "shell.execute_reply": "2022-04-26T04:45:50.267098Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "#### Cross Validation Score"
+      ],
+      "metadata": {
+        "id": "e9063a31"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from sklearn.model_selection import cross_val_score\n",
+        "cvs=cross_val_score(knn,x,y,cv=5,scoring=\"accuracy\")\n",
+        "print(f\"CVS: {cvs}\")\n",
+        "print(f\"CVS Mean: {cvs.mean()}\")\n",
+        "print(f\"CVS Standard Deviation: {cvs.std()}\")"
+      ],
+      "metadata": {
+        "id": "51f4ea2a",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:45:50.269164Z",
+          "iopub.execute_input": "2022-04-26T04:45:50.269876Z",
+          "iopub.status.idle": "2022-04-26T04:45:50.997203Z",
+          "shell.execute_reply.started": "2022-04-26T04:45:50.269839Z",
+          "shell.execute_reply": "2022-04-26T04:45:50.996285Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "#### Bagging"
+      ],
+      "metadata": {
+        "id": "279a034d"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from sklearn.ensemble import BaggingClassifier\n",
+        "bg=BaggingClassifier(knn)\n",
+        "bg.fit(xtrain,ytrain)\n",
+        "ypred=bg.predict(xtest)"
+      ],
+      "metadata": {
+        "id": "509a84f7",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:45:51.006497Z",
+          "iopub.execute_input": "2022-04-26T04:45:51.006915Z",
+          "iopub.status.idle": "2022-04-26T04:45:51.718934Z",
+          "shell.execute_reply.started": "2022-04-26T04:45:51.006862Z",
+          "shell.execute_reply": "2022-04-26T04:45:51.718051Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "print(classification_report(ytest,ypred))"
+      ],
+      "metadata": {
+        "id": "7c77f42d",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:45:51.720349Z",
+          "iopub.execute_input": "2022-04-26T04:45:51.721211Z",
+          "iopub.status.idle": "2022-04-26T04:45:51.742683Z",
+          "shell.execute_reply.started": "2022-04-26T04:45:51.721163Z",
+          "shell.execute_reply": "2022-04-26T04:45:51.742099Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "accuracy_score(ytest,ypred)"
+      ],
+      "metadata": {
+        "id": "8ff9a2b6",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:45:51.743813Z",
+          "iopub.execute_input": "2022-04-26T04:45:51.744052Z",
+          "iopub.status.idle": "2022-04-26T04:45:51.750204Z",
+          "shell.execute_reply.started": "2022-04-26T04:45:51.744003Z",
+          "shell.execute_reply": "2022-04-26T04:45:51.74959Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "confusion_matrix(ytest,ypred)"
+      ],
+      "metadata": {
+        "id": "2d9858d2",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:45:51.751565Z",
+          "iopub.execute_input": "2022-04-26T04:45:51.751797Z",
+          "iopub.status.idle": "2022-04-26T04:45:51.762353Z",
+          "shell.execute_reply.started": "2022-04-26T04:45:51.75176Z",
+          "shell.execute_reply": "2022-04-26T04:45:51.761495Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "# Logistic Regression"
+      ],
+      "metadata": {
+        "id": "80fd3c05"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from sklearn.linear_model import LogisticRegression\n",
+        "logreg=LogisticRegression()\n",
+        "logreg.fit(xtrain,ytrain)\n",
+        "ypred=logreg.predict(xtest)"
+      ],
+      "metadata": {
+        "id": "b896ae52",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:45:51.764076Z",
+          "iopub.execute_input": "2022-04-26T04:45:51.764416Z",
+          "iopub.status.idle": "2022-04-26T04:45:51.800255Z",
+          "shell.execute_reply.started": "2022-04-26T04:45:51.764376Z",
+          "shell.execute_reply": "2022-04-26T04:45:51.79956Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "print(classification_report(ytest,ypred))"
+      ],
+      "metadata": {
+        "id": "f0631ebf",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:45:51.801534Z",
+          "iopub.execute_input": "2022-04-26T04:45:51.802394Z",
+          "iopub.status.idle": "2022-04-26T04:45:51.830418Z",
+          "shell.execute_reply.started": "2022-04-26T04:45:51.802346Z",
+          "shell.execute_reply": "2022-04-26T04:45:51.829582Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "accuracy_score(ytest,ypred)"
+      ],
+      "metadata": {
+        "id": "97a74dc9",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:45:51.831926Z",
+          "iopub.execute_input": "2022-04-26T04:45:51.832407Z",
+          "iopub.status.idle": "2022-04-26T04:45:51.840431Z",
+          "shell.execute_reply.started": "2022-04-26T04:45:51.832366Z",
+          "shell.execute_reply": "2022-04-26T04:45:51.83956Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "confusion_matrix(ytest,ypred)"
+      ],
+      "metadata": {
+        "id": "676279dd",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:45:51.8423Z",
+          "iopub.execute_input": "2022-04-26T04:45:51.84295Z",
+          "iopub.status.idle": "2022-04-26T04:45:51.859835Z",
+          "shell.execute_reply.started": "2022-04-26T04:45:51.842789Z",
+          "shell.execute_reply": "2022-04-26T04:45:51.858814Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "#### Hyper-Parameter Tuning"
+      ],
+      "metadata": {
+        "id": "ab34c6dd"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "params={\n",
+        "    \"C\": np.logspace(-3,3,7),\n",
+        "    \"solver\": [\"liblinear\",\"lbfgs\",\"sag\",\"saga\",\"newton-cg\"],\n",
+        "    \"penalty\": [\"l1\",\"l2\",\"elasticnet\"]\n",
+        "}"
+      ],
+      "metadata": {
+        "id": "816fa6da",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:45:51.862351Z",
+          "iopub.execute_input": "2022-04-26T04:45:51.86406Z",
+          "iopub.status.idle": "2022-04-26T04:45:51.875305Z",
+          "shell.execute_reply.started": "2022-04-26T04:45:51.863997Z",
+          "shell.execute_reply": "2022-04-26T04:45:51.874241Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from sklearn.model_selection import GridSearchCV\n",
+        "grid=GridSearchCV(logreg,params,verbose=3)\n",
+        "grid.fit(xtrain,ytrain)"
+      ],
+      "metadata": {
+        "id": "625e6760",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:45:51.878617Z",
+          "iopub.execute_input": "2022-04-26T04:45:51.879949Z",
+          "iopub.status.idle": "2022-04-26T04:46:03.986165Z",
+          "shell.execute_reply.started": "2022-04-26T04:45:51.879889Z",
+          "shell.execute_reply": "2022-04-26T04:46:03.985544Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "grid.best_score_"
+      ],
+      "metadata": {
+        "id": "e73b2d3f",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:46:03.987303Z",
+          "iopub.execute_input": "2022-04-26T04:46:03.987923Z",
+          "iopub.status.idle": "2022-04-26T04:46:03.993108Z",
+          "shell.execute_reply.started": "2022-04-26T04:46:03.987893Z",
+          "shell.execute_reply": "2022-04-26T04:46:03.992309Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "grid.best_params_"
+      ],
+      "metadata": {
+        "id": "4430ce59",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:46:03.994295Z",
+          "iopub.execute_input": "2022-04-26T04:46:03.994507Z",
+          "iopub.status.idle": "2022-04-26T04:46:04.005296Z",
+          "shell.execute_reply.started": "2022-04-26T04:46:03.994481Z",
+          "shell.execute_reply": "2022-04-26T04:46:04.004684Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "grid.best_estimator_"
+      ],
+      "metadata": {
+        "id": "1fefa0ec",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:46:04.006597Z",
+          "iopub.execute_input": "2022-04-26T04:46:04.007089Z",
+          "iopub.status.idle": "2022-04-26T04:46:04.016946Z",
+          "shell.execute_reply.started": "2022-04-26T04:46:04.007052Z",
+          "shell.execute_reply": "2022-04-26T04:46:04.016266Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "logreg=grid.best_estimator_\n",
+        "logreg.fit(xtrain,ytrain)\n",
+        "ypred=logreg.predict(xtest)"
+      ],
+      "metadata": {
+        "id": "5937dbf5",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:46:04.018334Z",
+          "iopub.execute_input": "2022-04-26T04:46:04.018539Z",
+          "iopub.status.idle": "2022-04-26T04:46:04.052211Z",
+          "shell.execute_reply.started": "2022-04-26T04:46:04.018514Z",
+          "shell.execute_reply": "2022-04-26T04:46:04.051191Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "print(classification_report(ytest,ypred))"
+      ],
+      "metadata": {
+        "id": "938d6681",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:46:04.053854Z",
+          "iopub.execute_input": "2022-04-26T04:46:04.054229Z",
+          "iopub.status.idle": "2022-04-26T04:46:04.082619Z",
+          "shell.execute_reply.started": "2022-04-26T04:46:04.054183Z",
+          "shell.execute_reply": "2022-04-26T04:46:04.081726Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "accuracy_score(ytest,ypred)"
+      ],
+      "metadata": {
+        "id": "e096a17e",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:46:04.084155Z",
+          "iopub.execute_input": "2022-04-26T04:46:04.084786Z",
+          "iopub.status.idle": "2022-04-26T04:46:04.09428Z",
+          "shell.execute_reply.started": "2022-04-26T04:46:04.084723Z",
+          "shell.execute_reply": "2022-04-26T04:46:04.093199Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "confusion_matrix(ytest,ypred)"
+      ],
+      "metadata": {
+        "id": "00569d34",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:46:04.096529Z",
+          "iopub.execute_input": "2022-04-26T04:46:04.097274Z",
+          "iopub.status.idle": "2022-04-26T04:46:04.108249Z",
+          "shell.execute_reply.started": "2022-04-26T04:46:04.097222Z",
+          "shell.execute_reply": "2022-04-26T04:46:04.107325Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "#### Cross Validation Score"
+      ],
+      "metadata": {
+        "id": "e52cd4f6"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from sklearn.model_selection import cross_val_score\n",
+        "cvs=cross_val_score(logreg,x,y,cv=5,scoring=\"accuracy\")\n",
+        "print(f\"CVS: {cvs}\")\n",
+        "print(f\"CVS Mean: {cvs.mean()}\")\n",
+        "print(f\"CVS Standard Deviation: {cvs.std()}\")"
+      ],
+      "metadata": {
+        "id": "4213ee89",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:46:04.110247Z",
+          "iopub.execute_input": "2022-04-26T04:46:04.111113Z",
+          "iopub.status.idle": "2022-04-26T04:46:07.557241Z",
+          "shell.execute_reply.started": "2022-04-26T04:46:04.111064Z",
+          "shell.execute_reply": "2022-04-26T04:46:07.556217Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "#### Bagging"
+      ],
+      "metadata": {
+        "id": "83772540"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from sklearn.ensemble import BaggingClassifier\n",
+        "bg=BaggingClassifier(logreg)\n",
+        "bg.fit(xtrain,ytrain)\n",
+        "ypred=bg.predict(xtest)"
+      ],
+      "metadata": {
+        "id": "c80acf2b",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:46:07.559511Z",
+          "iopub.execute_input": "2022-04-26T04:46:07.560294Z",
+          "iopub.status.idle": "2022-04-26T04:46:07.774945Z",
+          "shell.execute_reply.started": "2022-04-26T04:46:07.560237Z",
+          "shell.execute_reply": "2022-04-26T04:46:07.773728Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "print(classification_report(ytest,ypred))"
+      ],
+      "metadata": {
+        "id": "247d969a",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:46:07.776942Z",
+          "iopub.execute_input": "2022-04-26T04:46:07.777408Z",
+          "iopub.status.idle": "2022-04-26T04:46:07.81133Z",
+          "shell.execute_reply.started": "2022-04-26T04:46:07.777357Z",
+          "shell.execute_reply": "2022-04-26T04:46:07.809825Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "accuracy_score(ytest,ypred)"
+      ],
+      "metadata": {
+        "id": "176c74d2",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:46:07.813289Z",
+          "iopub.execute_input": "2022-04-26T04:46:07.813693Z",
+          "iopub.status.idle": "2022-04-26T04:46:07.822692Z",
+          "shell.execute_reply.started": "2022-04-26T04:46:07.813587Z",
+          "shell.execute_reply": "2022-04-26T04:46:07.821806Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "confusion_matrix(ytest,ypred)"
+      ],
+      "metadata": {
+        "id": "ea8fbc1c",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:46:07.824871Z",
+          "iopub.execute_input": "2022-04-26T04:46:07.825725Z",
+          "iopub.status.idle": "2022-04-26T04:46:07.837101Z",
+          "shell.execute_reply.started": "2022-04-26T04:46:07.825673Z",
+          "shell.execute_reply": "2022-04-26T04:46:07.836091Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "# Naive Bayes"
+      ],
+      "metadata": {
+        "id": "4832cb2b"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from sklearn.naive_bayes import GaussianNB\n",
+        "nb=GaussianNB()\n",
+        "nb.fit(xtrain,ytrain)\n",
+        "ypred=nb.predict(xtest)"
+      ],
+      "metadata": {
+        "id": "bb983b9c",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:46:07.839331Z",
+          "iopub.execute_input": "2022-04-26T04:46:07.840007Z",
+          "iopub.status.idle": "2022-04-26T04:46:07.856223Z",
+          "shell.execute_reply.started": "2022-04-26T04:46:07.839958Z",
+          "shell.execute_reply": "2022-04-26T04:46:07.854914Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "print(classification_report(ytest,ypred))"
+      ],
+      "metadata": {
+        "id": "67aacf50",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:46:07.858306Z",
+          "iopub.execute_input": "2022-04-26T04:46:07.859054Z",
+          "iopub.status.idle": "2022-04-26T04:46:07.888006Z",
+          "shell.execute_reply.started": "2022-04-26T04:46:07.85899Z",
+          "shell.execute_reply": "2022-04-26T04:46:07.88711Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "accuracy_score(ytest,ypred)"
+      ],
+      "metadata": {
+        "id": "c6f133ab",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:46:07.89006Z",
+          "iopub.execute_input": "2022-04-26T04:46:07.890733Z",
+          "iopub.status.idle": "2022-04-26T04:46:07.900082Z",
+          "shell.execute_reply.started": "2022-04-26T04:46:07.890681Z",
+          "shell.execute_reply": "2022-04-26T04:46:07.899218Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "confusion_matrix(ytest,ypred)"
+      ],
+      "metadata": {
+        "id": "ab0a592d",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:46:07.901924Z",
+          "iopub.execute_input": "2022-04-26T04:46:07.902455Z",
+          "iopub.status.idle": "2022-04-26T04:46:07.914064Z",
+          "shell.execute_reply.started": "2022-04-26T04:46:07.902412Z",
+          "shell.execute_reply": "2022-04-26T04:46:07.912915Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "#### Cross Validation Score"
+      ],
+      "metadata": {
+        "id": "f8164bc1"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from sklearn.model_selection import cross_val_score\n",
+        "cvs=cross_val_score(nb,x,y,cv=5,scoring=\"accuracy\")\n",
+        "print(f\"CVS: {cvs}\")\n",
+        "print(f\"CVS Mean: {cvs.mean()}\")\n",
+        "print(f\"CVS Standard Deviation: {cvs.std()}\")"
+      ],
+      "metadata": {
+        "id": "f9c5a364",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:46:07.915956Z",
+          "iopub.execute_input": "2022-04-26T04:46:07.916444Z",
+          "iopub.status.idle": "2022-04-26T04:46:07.975665Z",
+          "shell.execute_reply.started": "2022-04-26T04:46:07.916399Z",
+          "shell.execute_reply": "2022-04-26T04:46:07.974512Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "#### Bagging"
+      ],
+      "metadata": {
+        "id": "e9698103"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from sklearn.ensemble import BaggingClassifier\n",
+        "bg=BaggingClassifier(nb)\n",
+        "bg.fit(xtrain,ytrain)\n",
+        "ypred=bg.predict(xtest)"
+      ],
+      "metadata": {
+        "id": "b326d11c",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:46:07.977005Z",
+          "iopub.execute_input": "2022-04-26T04:46:07.977249Z",
+          "iopub.status.idle": "2022-04-26T04:46:08.053506Z",
+          "shell.execute_reply.started": "2022-04-26T04:46:07.977221Z",
+          "shell.execute_reply": "2022-04-26T04:46:08.052449Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "print(classification_report(ytest,ypred))"
+      ],
+      "metadata": {
+        "id": "eaeca0ca",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:46:08.054889Z",
+          "iopub.execute_input": "2022-04-26T04:46:08.05589Z",
+          "iopub.status.idle": "2022-04-26T04:46:08.076546Z",
+          "shell.execute_reply.started": "2022-04-26T04:46:08.055853Z",
+          "shell.execute_reply": "2022-04-26T04:46:08.075486Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "accuracy_score(ytest,ypred)"
+      ],
+      "metadata": {
+        "id": "203e2b0c",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:46:08.07838Z",
+          "iopub.execute_input": "2022-04-26T04:46:08.078691Z",
+          "iopub.status.idle": "2022-04-26T04:46:08.086192Z",
+          "shell.execute_reply.started": "2022-04-26T04:46:08.078647Z",
+          "shell.execute_reply": "2022-04-26T04:46:08.085302Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "confusion_matrix(ytest,ypred)"
+      ],
+      "metadata": {
+        "id": "a9e84e49",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:46:08.088005Z",
+          "iopub.execute_input": "2022-04-26T04:46:08.088479Z",
+          "iopub.status.idle": "2022-04-26T04:46:08.097915Z",
+          "shell.execute_reply.started": "2022-04-26T04:46:08.088436Z",
+          "shell.execute_reply": "2022-04-26T04:46:08.097068Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "# Decision Tree"
+      ],
+      "metadata": {
+        "id": "2b4a92eb"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from sklearn.tree import DecisionTreeClassifier\n",
+        "dt=DecisionTreeClassifier()\n",
+        "dt.fit(xtrain,ytrain)\n",
+        "ypred=dt.predict(xtest)"
+      ],
+      "metadata": {
+        "id": "eee2d548",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:46:08.099643Z",
+          "iopub.execute_input": "2022-04-26T04:46:08.099855Z",
+          "iopub.status.idle": "2022-04-26T04:46:08.128624Z",
+          "shell.execute_reply.started": "2022-04-26T04:46:08.09983Z",
+          "shell.execute_reply": "2022-04-26T04:46:08.127605Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "print(classification_report(ytest,ypred))"
+      ],
+      "metadata": {
+        "id": "e18473d0",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:46:08.130231Z",
+          "iopub.execute_input": "2022-04-26T04:46:08.130453Z",
+          "iopub.status.idle": "2022-04-26T04:46:08.151931Z",
+          "shell.execute_reply.started": "2022-04-26T04:46:08.130426Z",
+          "shell.execute_reply": "2022-04-26T04:46:08.151006Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "accuracy_score(ytest,ypred)"
+      ],
+      "metadata": {
+        "id": "63bd5433",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:46:08.153394Z",
+          "iopub.execute_input": "2022-04-26T04:46:08.153777Z",
+          "iopub.status.idle": "2022-04-26T04:46:08.16244Z",
+          "shell.execute_reply.started": "2022-04-26T04:46:08.15373Z",
+          "shell.execute_reply": "2022-04-26T04:46:08.161483Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "confusion_matrix(ytest,ypred)"
+      ],
+      "metadata": {
+        "id": "0a57e600",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:46:08.163946Z",
+          "iopub.execute_input": "2022-04-26T04:46:08.16476Z",
+          "iopub.status.idle": "2022-04-26T04:46:08.174861Z",
+          "shell.execute_reply.started": "2022-04-26T04:46:08.164711Z",
+          "shell.execute_reply": "2022-04-26T04:46:08.173885Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "#### Hyper-Parameter Tuning"
+      ],
+      "metadata": {
+        "id": "b8c0e235"
+      }
+    },
+    {
+      "cell_type": "raw",
+      "source": [
+        "Criterion--> \"GINI\""
+      ],
+      "metadata": {
+        "id": "cb459e5d"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "s=0\n",
+        "for i in range(1,50):\n",
+        "    dt=DecisionTreeClassifier(criterion=\"gini\",max_depth=i)\n",
+        "    dt.fit(xtrain,ytrain)\n",
+        "    ypred=dt.predict(xtest)\n",
+        "    ss=accuracy_score(ytest,ypred)\n",
+        "    if(s<ss):\n",
+        "        s=ss\n",
+        "        a=i\n",
+        "print(s,a)"
+      ],
+      "metadata": {
+        "id": "2390571a",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:46:08.176445Z",
+          "iopub.execute_input": "2022-04-26T04:46:08.17677Z",
+          "iopub.status.idle": "2022-04-26T04:46:09.11434Z",
+          "shell.execute_reply.started": "2022-04-26T04:46:08.176728Z",
+          "shell.execute_reply": "2022-04-26T04:46:09.113641Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "s=0\n",
+        "for i in range(1,50):\n",
+        "    dt=DecisionTreeClassifier(criterion=\"gini\",min_samples_leaf=i)\n",
+        "    dt.fit(xtrain,ytrain)\n",
+        "    ypred=dt.predict(xtest)\n",
+        "    ss=accuracy_score(ytest,ypred)\n",
+        "    if(s<ss):\n",
+        "        s=ss\n",
+        "        a=i\n",
+        "print(s,a)"
+      ],
+      "metadata": {
+        "id": "e7d4d9d6",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:46:09.115607Z",
+          "iopub.execute_input": "2022-04-26T04:46:09.116365Z",
+          "iopub.status.idle": "2022-04-26T04:46:10.031962Z",
+          "shell.execute_reply.started": "2022-04-26T04:46:09.116327Z",
+          "shell.execute_reply": "2022-04-26T04:46:10.031104Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "raw",
+      "source": [
+        "Criterion-->\"ENTROPY\""
+      ],
+      "metadata": {
+        "id": "94c10774"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "s=0\n",
+        "for i in range(1,50):\n",
+        "    dt=DecisionTreeClassifier(criterion=\"entropy\",max_depth=i)\n",
+        "    dt.fit(xtrain,ytrain)\n",
+        "    ypred=dt.predict(xtest)\n",
+        "    ss=accuracy_score(ytest,ypred)\n",
+        "    if(s<ss):\n",
+        "        s=ss\n",
+        "        a=i\n",
+        "print(s,a)"
+      ],
+      "metadata": {
+        "id": "0fc314e6",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:46:10.033658Z",
+          "iopub.execute_input": "2022-04-26T04:46:10.034029Z",
+          "iopub.status.idle": "2022-04-26T04:46:10.873294Z",
+          "shell.execute_reply.started": "2022-04-26T04:46:10.033969Z",
+          "shell.execute_reply": "2022-04-26T04:46:10.872386Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "s=0\n",
+        "for i in range(1,50):\n",
+        "    dt=DecisionTreeClassifier(criterion=\"entropy\",min_samples_leaf=i)\n",
+        "    dt.fit(xtrain,ytrain)\n",
+        "    ypred=dt.predict(xtest)\n",
+        "    ss=accuracy_score(ytest,ypred)\n",
+        "    if(s<ss):\n",
+        "        s=ss\n",
+        "        a=i\n",
+        "print(s,a)"
+      ],
+      "metadata": {
+        "id": "1ef113a2",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:46:10.874502Z",
+          "iopub.execute_input": "2022-04-26T04:46:10.874743Z",
+          "iopub.status.idle": "2022-04-26T04:46:11.680499Z",
+          "shell.execute_reply.started": "2022-04-26T04:46:10.874713Z",
+          "shell.execute_reply": "2022-04-26T04:46:11.679601Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "raw",
+      "source": [
+        "SUMMARY:\n",
+        "    Criterion \"GINI\"\n",
+        "        - Max depth: 96.29%\n",
+        "        - Min samples leaf: 96.00%\n",
+        "    Criterion \"ENTROPY\"\n",
+        "        - Max depth: 96.81%\n",
+        "        - Min samples leaf: 96.69%"
+      ],
+      "metadata": {
+        "id": "1185942d"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "dt=DecisionTreeClassifier(criterion=\"entropy\",max_depth=23)\n",
+        "dt.fit(xtrain,ytrain)\n",
+        "ypred=dt.predict(xtest)"
+      ],
+      "metadata": {
+        "id": "19b15009",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:46:11.68195Z",
+          "iopub.execute_input": "2022-04-26T04:46:11.682212Z",
+          "iopub.status.idle": "2022-04-26T04:46:11.705976Z",
+          "shell.execute_reply.started": "2022-04-26T04:46:11.682178Z",
+          "shell.execute_reply": "2022-04-26T04:46:11.705057Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "print(classification_report(ytest,ypred))"
+      ],
+      "metadata": {
+        "id": "42c92cf6",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:46:11.707333Z",
+          "iopub.execute_input": "2022-04-26T04:46:11.708065Z",
+          "iopub.status.idle": "2022-04-26T04:46:11.72876Z",
+          "shell.execute_reply.started": "2022-04-26T04:46:11.708Z",
+          "shell.execute_reply": "2022-04-26T04:46:11.728079Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "accuracy_score(ytest,ypred)"
+      ],
+      "metadata": {
+        "id": "6fb3b9b7",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:46:11.730282Z",
+          "iopub.execute_input": "2022-04-26T04:46:11.730518Z",
+          "iopub.status.idle": "2022-04-26T04:46:11.737505Z",
+          "shell.execute_reply.started": "2022-04-26T04:46:11.730488Z",
+          "shell.execute_reply": "2022-04-26T04:46:11.736566Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "confusion_matrix(ytest,ypred)"
+      ],
+      "metadata": {
+        "id": "f2973c83",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:46:11.738763Z",
+          "iopub.execute_input": "2022-04-26T04:46:11.739175Z",
+          "iopub.status.idle": "2022-04-26T04:46:11.749877Z",
+          "shell.execute_reply.started": "2022-04-26T04:46:11.739101Z",
+          "shell.execute_reply": "2022-04-26T04:46:11.749229Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "#### Cross Validation Score"
+      ],
+      "metadata": {
+        "id": "f2b26e7f"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from sklearn.model_selection import cross_val_score\n",
+        "cvs=cross_val_score(dt,x,y,cv=5,scoring=\"accuracy\")\n",
+        "print(f\"CVS: {cvs}\")\n",
+        "print(f\"CVS Mean: {cvs.mean()}\")\n",
+        "print(f\"CVS Standard Deviation: {cvs.std()}\")"
+      ],
+      "metadata": {
+        "id": "5b7331cf",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:46:11.751049Z",
+          "iopub.execute_input": "2022-04-26T04:46:11.751549Z",
+          "iopub.status.idle": "2022-04-26T04:46:11.884227Z",
+          "shell.execute_reply.started": "2022-04-26T04:46:11.75152Z",
+          "shell.execute_reply": "2022-04-26T04:46:11.883194Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "#### Bagging"
+      ],
+      "metadata": {
+        "id": "9edc0394"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from sklearn.ensemble import BaggingClassifier\n",
+        "bg=BaggingClassifier(dt)\n",
+        "bg.fit(xtrain,ytrain)\n",
+        "ypred=bg.predict(xtest)"
+      ],
+      "metadata": {
+        "id": "640da8a1",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:46:11.885687Z",
+          "iopub.execute_input": "2022-04-26T04:46:11.885919Z",
+          "iopub.status.idle": "2022-04-26T04:46:12.03834Z",
+          "shell.execute_reply.started": "2022-04-26T04:46:11.885889Z",
+          "shell.execute_reply": "2022-04-26T04:46:12.036937Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "print(classification_report(ytest,ypred))"
+      ],
+      "metadata": {
+        "id": "3f6e14a7",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:46:12.040271Z",
+          "iopub.execute_input": "2022-04-26T04:46:12.040596Z",
+          "iopub.status.idle": "2022-04-26T04:46:12.061358Z",
+          "shell.execute_reply.started": "2022-04-26T04:46:12.040551Z",
+          "shell.execute_reply": "2022-04-26T04:46:12.060461Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "accuracy_score(ytest,ypred)"
+      ],
+      "metadata": {
+        "id": "668e9ae3",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:46:12.06309Z",
+          "iopub.execute_input": "2022-04-26T04:46:12.063394Z",
+          "iopub.status.idle": "2022-04-26T04:46:12.07097Z",
+          "shell.execute_reply.started": "2022-04-26T04:46:12.06335Z",
+          "shell.execute_reply": "2022-04-26T04:46:12.070107Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "confusion_matrix(ytest,ypred)"
+      ],
+      "metadata": {
+        "id": "6bd4d99e",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:46:12.072551Z",
+          "iopub.execute_input": "2022-04-26T04:46:12.073044Z",
+          "iopub.status.idle": "2022-04-26T04:46:12.085615Z",
+          "shell.execute_reply.started": "2022-04-26T04:46:12.072981Z",
+          "shell.execute_reply": "2022-04-26T04:46:12.084409Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "# Random Forest"
+      ],
+      "metadata": {
+        "id": "60431264"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from sklearn.ensemble import RandomForestClassifier\n",
+        "rf=RandomForestClassifier()\n",
+        "rf.fit(xtrain,ytrain)\n",
+        "ypred=rf.predict(xtest)"
+      ],
+      "metadata": {
+        "id": "ca032337",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:46:12.087301Z",
+          "iopub.execute_input": "2022-04-26T04:46:12.087528Z",
+          "iopub.status.idle": "2022-04-26T04:46:12.931541Z",
+          "shell.execute_reply.started": "2022-04-26T04:46:12.087501Z",
+          "shell.execute_reply": "2022-04-26T04:46:12.930707Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "print(classification_report(ytest,ypred))"
+      ],
+      "metadata": {
+        "id": "db9f0122",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:46:12.932681Z",
+          "iopub.execute_input": "2022-04-26T04:46:12.932907Z",
+          "iopub.status.idle": "2022-04-26T04:46:12.951728Z",
+          "shell.execute_reply.started": "2022-04-26T04:46:12.932881Z",
+          "shell.execute_reply": "2022-04-26T04:46:12.951173Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "accuracy_score(ytest,ypred)"
+      ],
+      "metadata": {
+        "id": "b335bbd7",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:46:12.952799Z",
+          "iopub.execute_input": "2022-04-26T04:46:12.953506Z",
+          "iopub.status.idle": "2022-04-26T04:46:12.960938Z",
+          "shell.execute_reply.started": "2022-04-26T04:46:12.95347Z",
+          "shell.execute_reply": "2022-04-26T04:46:12.960081Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "confusion_matrix(ytest,ypred)"
+      ],
+      "metadata": {
+        "id": "ed27ece8",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:46:12.962796Z",
+          "iopub.execute_input": "2022-04-26T04:46:12.963393Z",
+          "iopub.status.idle": "2022-04-26T04:46:12.974315Z",
+          "shell.execute_reply.started": "2022-04-26T04:46:12.963348Z",
+          "shell.execute_reply": "2022-04-26T04:46:12.973403Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "#### Cross Validation Score"
+      ],
+      "metadata": {
+        "id": "21664fcb"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from sklearn.model_selection import cross_val_score\n",
+        "cvs=cross_val_score(rf,x,y,cv=5,scoring=\"accuracy\")\n",
+        "print(f\"CVS: {cvs}\")\n",
+        "print(f\"CVS Mean: {cvs.mean()}\")\n",
+        "print(f\"CVS Standard Deviation: {cvs.std()}\")"
+      ],
+      "metadata": {
+        "id": "65693793",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:46:12.975757Z",
+          "iopub.execute_input": "2022-04-26T04:46:12.97655Z",
+          "iopub.status.idle": "2022-04-26T04:46:17.20241Z",
+          "shell.execute_reply.started": "2022-04-26T04:46:12.976497Z",
+          "shell.execute_reply": "2022-04-26T04:46:17.201472Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "# Support Vector Classifier"
+      ],
+      "metadata": {
+        "id": "5f7e7ec1"
+      }
+    },
+    {
+      "cell_type": "raw",
+      "source": [
+        "Kernel-->\"rbf\""
+      ],
+      "metadata": {
+        "id": "34471994"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from sklearn.svm import SVC\n",
+        "svc=SVC()\n",
+        "svc.fit(xtrain,ytrain)\n",
+        "ypred=svc.predict(xtest)"
+      ],
+      "metadata": {
+        "id": "89deb464",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:46:17.203684Z",
+          "iopub.execute_input": "2022-04-26T04:46:17.204005Z",
+          "iopub.status.idle": "2022-04-26T04:46:19.428121Z",
+          "shell.execute_reply.started": "2022-04-26T04:46:17.20397Z",
+          "shell.execute_reply": "2022-04-26T04:46:19.427312Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "print(classification_report(ytest,ypred))"
+      ],
+      "metadata": {
+        "id": "0dd20be0",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:46:19.429313Z",
+          "iopub.execute_input": "2022-04-26T04:46:19.429698Z",
+          "iopub.status.idle": "2022-04-26T04:46:19.446844Z",
+          "shell.execute_reply.started": "2022-04-26T04:46:19.429666Z",
+          "shell.execute_reply": "2022-04-26T04:46:19.44594Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "accuracy_score(ytest,ypred)"
+      ],
+      "metadata": {
+        "id": "c62cabdd",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:46:19.448328Z",
+          "iopub.execute_input": "2022-04-26T04:46:19.448782Z",
+          "iopub.status.idle": "2022-04-26T04:46:19.456163Z",
+          "shell.execute_reply.started": "2022-04-26T04:46:19.448734Z",
+          "shell.execute_reply": "2022-04-26T04:46:19.455367Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "confusion_matrix(ytest,ypred)"
+      ],
+      "metadata": {
+        "id": "2a3d9f17",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:46:19.457437Z",
+          "iopub.execute_input": "2022-04-26T04:46:19.458122Z",
+          "iopub.status.idle": "2022-04-26T04:46:19.466678Z",
+          "shell.execute_reply.started": "2022-04-26T04:46:19.458086Z",
+          "shell.execute_reply": "2022-04-26T04:46:19.466087Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "raw",
+      "source": [
+        "Kernel-->\"linear\""
+      ],
+      "metadata": {
+        "id": "edac9995"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from sklearn.svm import SVC\n",
+        "svc=SVC(kernel=\"linear\")\n",
+        "svc.fit(xtrain,ytrain)\n",
+        "ypred=svc.predict(xtest)"
+      ],
+      "metadata": {
+        "id": "159e2239",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:46:19.46771Z",
+          "iopub.execute_input": "2022-04-26T04:46:19.468508Z",
+          "iopub.status.idle": "2022-04-26T04:46:22.881577Z",
+          "shell.execute_reply.started": "2022-04-26T04:46:19.468475Z",
+          "shell.execute_reply": "2022-04-26T04:46:22.880368Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "print(classification_report(ytest,ypred))"
+      ],
+      "metadata": {
+        "id": "bdee71df",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:46:22.883105Z",
+          "iopub.execute_input": "2022-04-26T04:46:22.883378Z",
+          "iopub.status.idle": "2022-04-26T04:46:22.90229Z",
+          "shell.execute_reply.started": "2022-04-26T04:46:22.883347Z",
+          "shell.execute_reply": "2022-04-26T04:46:22.90141Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "accuracy_score(ytest,ypred)"
+      ],
+      "metadata": {
+        "id": "e7b8543f",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:46:22.903612Z",
+          "iopub.execute_input": "2022-04-26T04:46:22.904172Z",
+          "iopub.status.idle": "2022-04-26T04:46:22.910856Z",
+          "shell.execute_reply.started": "2022-04-26T04:46:22.904133Z",
+          "shell.execute_reply": "2022-04-26T04:46:22.91007Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "confusion_matrix(ytest,ypred)"
+      ],
+      "metadata": {
+        "id": "23cf6780",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:46:22.91214Z",
+          "iopub.execute_input": "2022-04-26T04:46:22.913006Z",
+          "iopub.status.idle": "2022-04-26T04:46:22.923824Z",
+          "shell.execute_reply.started": "2022-04-26T04:46:22.91297Z",
+          "shell.execute_reply": "2022-04-26T04:46:22.923218Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "#### Hyper-Parameter Tuning"
+      ],
+      "metadata": {
+        "id": "202957a3"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "params={\n",
+        "    \"C\": np.logspace(-3,3,7),\n",
+        "    \"kernel\": [\"rbf\"]\n",
+        "}"
+      ],
+      "metadata": {
+        "id": "bc407449",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:46:22.9249Z",
+          "iopub.execute_input": "2022-04-26T04:46:22.925734Z",
+          "iopub.status.idle": "2022-04-26T04:46:22.932762Z",
+          "shell.execute_reply.started": "2022-04-26T04:46:22.92568Z",
+          "shell.execute_reply": "2022-04-26T04:46:22.931893Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from sklearn.model_selection import GridSearchCV\n",
+        "grid=GridSearchCV(svc,params,verbose=3)\n",
+        "grid.fit(xtrain,ytrain)"
+      ],
+      "metadata": {
+        "id": "3985fd5e",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:46:22.934241Z",
+          "iopub.execute_input": "2022-04-26T04:46:22.934658Z",
+          "iopub.status.idle": "2022-04-26T04:47:50.350444Z",
+          "shell.execute_reply.started": "2022-04-26T04:46:22.934623Z",
+          "shell.execute_reply": "2022-04-26T04:47:50.349592Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "grid.best_score_"
+      ],
+      "metadata": {
+        "id": "882feb57",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:47:50.351642Z",
+          "iopub.execute_input": "2022-04-26T04:47:50.351957Z",
+          "iopub.status.idle": "2022-04-26T04:47:50.357008Z",
+          "shell.execute_reply.started": "2022-04-26T04:47:50.351926Z",
+          "shell.execute_reply": "2022-04-26T04:47:50.356433Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "grid.best_params_"
+      ],
+      "metadata": {
+        "id": "92a48e6b",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:47:50.358301Z",
+          "iopub.execute_input": "2022-04-26T04:47:50.358865Z",
+          "iopub.status.idle": "2022-04-26T04:47:50.371138Z",
+          "shell.execute_reply.started": "2022-04-26T04:47:50.358831Z",
+          "shell.execute_reply": "2022-04-26T04:47:50.370571Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "grid.best_estimator_"
+      ],
+      "metadata": {
+        "id": "a63a5438",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:47:50.371968Z",
+          "iopub.execute_input": "2022-04-26T04:47:50.37222Z",
+          "iopub.status.idle": "2022-04-26T04:47:50.387927Z",
+          "shell.execute_reply.started": "2022-04-26T04:47:50.372191Z",
+          "shell.execute_reply": "2022-04-26T04:47:50.387071Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "svc=grid.best_estimator_\n",
+        "svc.fit(xtrain,ytrain)\n",
+        "ypred=svc.predict(xtest)"
+      ],
+      "metadata": {
+        "id": "c5e9cb78",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:47:50.389647Z",
+          "iopub.execute_input": "2022-04-26T04:47:50.389908Z",
+          "iopub.status.idle": "2022-04-26T04:47:54.672994Z",
+          "shell.execute_reply.started": "2022-04-26T04:47:50.38988Z",
+          "shell.execute_reply": "2022-04-26T04:47:54.672396Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "print(classification_report(ytest,ypred))"
+      ],
+      "metadata": {
+        "id": "4015103f",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:47:54.674164Z",
+          "iopub.execute_input": "2022-04-26T04:47:54.674491Z",
+          "iopub.status.idle": "2022-04-26T04:47:54.692899Z",
+          "shell.execute_reply.started": "2022-04-26T04:47:54.674463Z",
+          "shell.execute_reply": "2022-04-26T04:47:54.692074Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "accuracy_score(ytest,ypred)"
+      ],
+      "metadata": {
+        "id": "4a42c702",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:47:54.694164Z",
+          "iopub.execute_input": "2022-04-26T04:47:54.694397Z",
+          "iopub.status.idle": "2022-04-26T04:47:54.70081Z",
+          "shell.execute_reply.started": "2022-04-26T04:47:54.694368Z",
+          "shell.execute_reply": "2022-04-26T04:47:54.700164Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "confusion_matrix(ytest,ypred)"
+      ],
+      "metadata": {
+        "id": "80f93a5e",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:47:54.702117Z",
+          "iopub.execute_input": "2022-04-26T04:47:54.702567Z",
+          "iopub.status.idle": "2022-04-26T04:47:54.715116Z",
+          "shell.execute_reply.started": "2022-04-26T04:47:54.702527Z",
+          "shell.execute_reply": "2022-04-26T04:47:54.714168Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "#### Cross Validation Score"
+      ],
+      "metadata": {
+        "id": "3e1daf4c"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from sklearn.model_selection import cross_val_score\n",
+        "cvs=cross_val_score(svc,x,y,cv=5,scoring=\"accuracy\")\n",
+        "print(f\"CVS: {cvs}\")\n",
+        "print(f\"CVS Mean: {cvs.mean()}\")\n",
+        "print(f\"CVS Standard Deviation: {cvs.std()}\")"
+      ],
+      "metadata": {
+        "id": "0fc236e2",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:47:54.716384Z",
+          "iopub.execute_input": "2022-04-26T04:47:54.717198Z",
+          "iopub.status.idle": "2022-04-26T04:48:16.528133Z",
+          "shell.execute_reply.started": "2022-04-26T04:47:54.717154Z",
+          "shell.execute_reply": "2022-04-26T04:48:16.527423Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "#### Bagging"
+      ],
+      "metadata": {
+        "id": "552fdaa7"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from sklearn.ensemble import BaggingClassifier\n",
+        "bg=BaggingClassifier(svc)\n",
+        "bg.fit(xtrain,ytrain)\n",
+        "ypred=bg.predict(xtest)"
+      ],
+      "metadata": {
+        "id": "87914596",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:48:16.529494Z",
+          "iopub.execute_input": "2022-04-26T04:48:16.529944Z",
+          "iopub.status.idle": "2022-04-26T04:48:39.391969Z",
+          "shell.execute_reply.started": "2022-04-26T04:48:16.52991Z",
+          "shell.execute_reply": "2022-04-26T04:48:39.391072Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "print(classification_report(ytest,ypred))"
+      ],
+      "metadata": {
+        "id": "21dd86b5",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:48:39.393588Z",
+          "iopub.execute_input": "2022-04-26T04:48:39.39412Z",
+          "iopub.status.idle": "2022-04-26T04:48:39.412349Z",
+          "shell.execute_reply.started": "2022-04-26T04:48:39.394086Z",
+          "shell.execute_reply": "2022-04-26T04:48:39.411619Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "accuracy_score(ytest,ypred)"
+      ],
+      "metadata": {
+        "id": "98b3cab7",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:48:39.4137Z",
+          "iopub.execute_input": "2022-04-26T04:48:39.414194Z",
+          "iopub.status.idle": "2022-04-26T04:48:39.420283Z",
+          "shell.execute_reply.started": "2022-04-26T04:48:39.414151Z",
+          "shell.execute_reply": "2022-04-26T04:48:39.419564Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "confusion_matrix(ytest,ypred)"
+      ],
+      "metadata": {
+        "id": "e79fa6b4",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:48:39.421546Z",
+          "iopub.execute_input": "2022-04-26T04:48:39.422263Z",
+          "iopub.status.idle": "2022-04-26T04:48:39.435567Z",
+          "shell.execute_reply.started": "2022-04-26T04:48:39.422228Z",
+          "shell.execute_reply": "2022-04-26T04:48:39.434678Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "# Voting Classifier"
+      ],
+      "metadata": {
+        "id": "f6be7af9"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "models=[]\n",
+        "models.append((\"KNeighborsClassifier\", KNeighborsClassifier()))\n",
+        "models.append((\"LogisticRegression\", LogisticRegression()))\n",
+        "models.append((\"Naive Bayes\", GaussianNB()))\n",
+        "models.append((\"DecisionTree\", DecisionTreeClassifier()))\n",
+        "models.append((\"RandomForest\", RandomForestClassifier()))\n",
+        "models.append((\"SVC\", SVC()))"
+      ],
+      "metadata": {
+        "id": "4b4772a8",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:48:39.437597Z",
+          "iopub.execute_input": "2022-04-26T04:48:39.438371Z",
+          "iopub.status.idle": "2022-04-26T04:48:39.446128Z",
+          "shell.execute_reply.started": "2022-04-26T04:48:39.438195Z",
+          "shell.execute_reply": "2022-04-26T04:48:39.445403Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from sklearn.ensemble import VotingClassifier\n",
+        "vt=VotingClassifier(estimators=models)\n",
+        "vt.fit(xtrain,ytrain)\n",
+        "ypred=vt.predict(xtest)"
+      ],
+      "metadata": {
+        "id": "c7aebff2",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:48:39.447576Z",
+          "iopub.execute_input": "2022-04-26T04:48:39.447889Z",
+          "iopub.status.idle": "2022-04-26T04:48:42.934797Z",
+          "shell.execute_reply.started": "2022-04-26T04:48:39.447849Z",
+          "shell.execute_reply": "2022-04-26T04:48:42.934102Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "print(classification_report(ytest,ypred))"
+      ],
+      "metadata": {
+        "id": "19d45a22",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:48:42.9358Z",
+          "iopub.execute_input": "2022-04-26T04:48:42.936614Z",
+          "iopub.status.idle": "2022-04-26T04:48:42.956239Z",
+          "shell.execute_reply.started": "2022-04-26T04:48:42.936569Z",
+          "shell.execute_reply": "2022-04-26T04:48:42.955331Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "confusion_matrix(ytest,ypred)"
+      ],
+      "metadata": {
+        "id": "1598f78b",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:48:42.957666Z",
+          "iopub.execute_input": "2022-04-26T04:48:42.957989Z",
+          "iopub.status.idle": "2022-04-26T04:48:42.96623Z",
+          "shell.execute_reply.started": "2022-04-26T04:48:42.957946Z",
+          "shell.execute_reply": "2022-04-26T04:48:42.965316Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "accuracy_score(ytest,ypred)"
+      ],
+      "metadata": {
+        "id": "898305cd",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:48:42.96763Z",
+          "iopub.execute_input": "2022-04-26T04:48:42.967902Z",
+          "iopub.status.idle": "2022-04-26T04:48:42.977451Z",
+          "shell.execute_reply.started": "2022-04-26T04:48:42.967828Z",
+          "shell.execute_reply": "2022-04-26T04:48:42.976766Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "# Boosting"
+      ],
+      "metadata": {
+        "id": "370d1a5c"
+      }
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "###### AdaBoostClassifier"
+      ],
+      "metadata": {
+        "id": "24c6347c"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from sklearn.ensemble import AdaBoostClassifier\n",
+        "abc = AdaBoostClassifier()\n",
+        "abc.fit(xtrain,ytrain)\n",
+        "ypred = abc.predict(xtest)\n",
+        "print(classification_report(ytest,ypred))"
+      ],
+      "metadata": {
+        "id": "63e8e21b",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:48:42.97886Z",
+          "iopub.execute_input": "2022-04-26T04:48:42.979114Z",
+          "iopub.status.idle": "2022-04-26T04:48:43.362936Z",
+          "shell.execute_reply.started": "2022-04-26T04:48:42.979086Z",
+          "shell.execute_reply": "2022-04-26T04:48:43.362332Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "accuracy_score(ytest,ypred)"
+      ],
+      "metadata": {
+        "id": "8afd322d",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:48:43.372096Z",
+          "iopub.execute_input": "2022-04-26T04:48:43.372339Z",
+          "iopub.status.idle": "2022-04-26T04:48:43.379347Z",
+          "shell.execute_reply.started": "2022-04-26T04:48:43.372311Z",
+          "shell.execute_reply": "2022-04-26T04:48:43.378307Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "confusion_matrix(ytest,ypred)"
+      ],
+      "metadata": {
+        "id": "29a18bec",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:48:43.380686Z",
+          "iopub.execute_input": "2022-04-26T04:48:43.380983Z",
+          "iopub.status.idle": "2022-04-26T04:48:43.391042Z",
+          "shell.execute_reply.started": "2022-04-26T04:48:43.380943Z",
+          "shell.execute_reply": "2022-04-26T04:48:43.390408Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "###### Gradient Boosting"
+      ],
+      "metadata": {
+        "id": "ab24cafb"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from sklearn.ensemble import GradientBoostingClassifier\n",
+        "gb = GradientBoostingClassifier()\n",
+        "gb.fit(xtrain,ytrain)\n",
+        "ypred = gb.predict(xtest)\n",
+        "print(classification_report(ytest,ypred))"
+      ],
+      "metadata": {
+        "id": "0e57ae2a",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:48:43.392161Z",
+          "iopub.execute_input": "2022-04-26T04:48:43.392866Z",
+          "iopub.status.idle": "2022-04-26T04:48:44.341757Z",
+          "shell.execute_reply.started": "2022-04-26T04:48:43.392826Z",
+          "shell.execute_reply": "2022-04-26T04:48:44.340806Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "accuracy_score(ytest,ypred)"
+      ],
+      "metadata": {
+        "id": "ca7e9c5a",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:48:44.343768Z",
+          "iopub.execute_input": "2022-04-26T04:48:44.34454Z",
+          "iopub.status.idle": "2022-04-26T04:48:44.352207Z",
+          "shell.execute_reply.started": "2022-04-26T04:48:44.34447Z",
+          "shell.execute_reply": "2022-04-26T04:48:44.351079Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "confusion_matrix(ytest,ypred)"
+      ],
+      "metadata": {
+        "id": "7bf312c1",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:48:44.353358Z",
+          "iopub.execute_input": "2022-04-26T04:48:44.353574Z",
+          "iopub.status.idle": "2022-04-26T04:48:44.365078Z",
+          "shell.execute_reply.started": "2022-04-26T04:48:44.35354Z",
+          "shell.execute_reply": "2022-04-26T04:48:44.364458Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "###### XG Boosting"
+      ],
+      "metadata": {
+        "id": "f3d6a5d2"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from xgboost import XGBClassifier\n",
+        "xg = XGBClassifier()\n",
+        "xg.fit(xtrain, ytrain)\n",
+        "ypred = xg.predict(xtest)\n",
+        "print(classification_report(ytest, ypred))"
+      ],
+      "metadata": {
+        "id": "0457439b",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:48:44.366398Z",
+          "iopub.execute_input": "2022-04-26T04:48:44.367041Z",
+          "iopub.status.idle": "2022-04-26T04:48:45.298805Z",
+          "shell.execute_reply.started": "2022-04-26T04:48:44.366989Z",
+          "shell.execute_reply": "2022-04-26T04:48:45.298162Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "accuracy_score(ytest,ypred)"
+      ],
+      "metadata": {
+        "id": "1fbf179e",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:48:45.299831Z",
+          "iopub.execute_input": "2022-04-26T04:48:45.300372Z",
+          "iopub.status.idle": "2022-04-26T04:48:45.306162Z",
+          "shell.execute_reply.started": "2022-04-26T04:48:45.300335Z",
+          "shell.execute_reply": "2022-04-26T04:48:45.305509Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "confusion_matrix(ytest,ypred)"
+      ],
+      "metadata": {
+        "id": "354ac36f",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:48:45.307374Z",
+          "iopub.execute_input": "2022-04-26T04:48:45.307593Z",
+          "iopub.status.idle": "2022-04-26T04:48:45.321579Z",
+          "shell.execute_reply.started": "2022-04-26T04:48:45.307567Z",
+          "shell.execute_reply": "2022-04-26T04:48:45.320712Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "# Deep Learning- Artificial Neural Network"
+      ],
+      "metadata": {
+        "id": "383deca6"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import tensorflow as tf\n",
+        "from tensorflow.keras.models import Sequential\n",
+        "from tensorflow.keras.layers import Dense"
+      ],
+      "metadata": {
+        "id": "945877b3",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:48:45.323335Z",
+          "iopub.execute_input": "2022-04-26T04:48:45.323942Z",
+          "iopub.status.idle": "2022-04-26T04:48:50.769225Z",
+          "shell.execute_reply.started": "2022-04-26T04:48:45.323895Z",
+          "shell.execute_reply": "2022-04-26T04:48:50.768421Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "ann=Sequential()\n",
+        "\n",
+        "ann.add(Dense(units=6,activation=\"relu\"))\n",
+        "ann.add(Dense(units=3,activation=\"relu\"))\n",
+        "ann.add(Dense(units=1,activation=\"sigmoid\"))\n",
+        "\n",
+        "ann.compile(optimizer=\"adam\",loss=\"binary_crossentropy\",metrics=\"accuracy\")\n",
+        "\n",
+        "ann.fit(xtrain,ytrain,epochs=1000,validation_data=(xtest,ytest),batch_size=200)"
+      ],
+      "metadata": {
+        "id": "GixYaAbQ-WRh",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:48:50.770639Z",
+          "iopub.execute_input": "2022-04-26T04:48:50.770935Z",
+          "iopub.status.idle": "2022-04-26T04:51:38.024534Z",
+          "shell.execute_reply.started": "2022-04-26T04:48:50.770896Z",
+          "shell.execute_reply": "2022-04-26T04:51:38.023398Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "lossdf=pd.DataFrame(ann.history.history)\n",
+        "lossdf.plot()\n",
+        "plt.show()"
+      ],
+      "metadata": {
+        "id": "buC8da0x-WVW",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:51:38.026563Z",
+          "iopub.execute_input": "2022-04-26T04:51:38.026876Z",
+          "iopub.status.idle": "2022-04-26T04:51:38.273933Z",
+          "shell.execute_reply.started": "2022-04-26T04:51:38.026833Z",
+          "shell.execute_reply": "2022-04-26T04:51:38.272996Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "ypred=ann.predict(xtest)"
+      ],
+      "metadata": {
+        "id": "09Z4gPrTCzLN",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:51:38.275738Z",
+          "iopub.execute_input": "2022-04-26T04:51:38.276064Z",
+          "iopub.status.idle": "2022-04-26T04:51:38.530336Z",
+          "shell.execute_reply.started": "2022-04-26T04:51:38.276Z",
+          "shell.execute_reply": "2022-04-26T04:51:38.529444Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "ypred=ypred>0.5"
+      ],
+      "metadata": {
+        "id": "ufG83LM5F1sW",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:51:38.532033Z",
+          "iopub.execute_input": "2022-04-26T04:51:38.532301Z",
+          "iopub.status.idle": "2022-04-26T04:51:38.536513Z",
+          "shell.execute_reply.started": "2022-04-26T04:51:38.532271Z",
+          "shell.execute_reply": "2022-04-26T04:51:38.535434Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "print(classification_report(ytest,ypred))"
+      ],
+      "metadata": {
+        "id": "sh4ZVJ0zF4aa",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:51:38.537669Z",
+          "iopub.execute_input": "2022-04-26T04:51:38.537921Z",
+          "iopub.status.idle": "2022-04-26T04:51:38.563471Z",
+          "shell.execute_reply.started": "2022-04-26T04:51:38.53789Z",
+          "shell.execute_reply": "2022-04-26T04:51:38.562848Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "accuracy_score(ytest,ypred)"
+      ],
+      "metadata": {
+        "id": "cP-UsPc9F8T2",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:51:38.564573Z",
+          "iopub.execute_input": "2022-04-26T04:51:38.565353Z",
+          "iopub.status.idle": "2022-04-26T04:51:38.572247Z",
+          "shell.execute_reply.started": "2022-04-26T04:51:38.565318Z",
+          "shell.execute_reply": "2022-04-26T04:51:38.571555Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "confusion_matrix(ytest,ypred)"
+      ],
+      "metadata": {
+        "id": "T_jXQmL0F-N3",
+        "execution": {
+          "iopub.status.busy": "2022-04-26T04:51:38.573715Z",
+          "iopub.execute_input": "2022-04-26T04:51:38.574255Z",
+          "iopub.status.idle": "2022-04-26T04:51:38.584192Z",
+          "shell.execute_reply.started": "2022-04-26T04:51:38.574222Z",
+          "shell.execute_reply": "2022-04-26T04:51:38.583308Z"
+        },
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": null
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "# Summary"
+      ],
+      "metadata": {
+        "id": "B_4IW0SCGAAc"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [],
+      "metadata": {
+        "id": "nPelSpXHIa0n"
+      },
+      "outputs": [],
+      "execution_count": null
+    }
+  ]
+}
